@@ -7,42 +7,43 @@
 // 오아시스 재결합
 
 #include <cstdio>
+#include <stack>
 
-int a[500001];
+int arr[500000];
+using namespace std;
+
 int main(int argc, const char * argv[]) {
+    stack<int> people;
+    stack<int> look;
     int n;
     scanf("%d",&n);
+    for(int i=0;i<n;++i)
+        scanf("%d",&arr[i]);
     
-    for(int i = 0 ; i < n;i++)
-        scanf("%d",&a[i]);
+    long long  ans = 0;
     
-    int ans = 0;
-    for(int i=0;i<n-1;i++){
-        for(int j=i+1;j<n;j++){
-            if(a[i]==a[j])
-                ans++;
-            if(a[i]<a[j]){
-                ans++;
+    for( int i = 0 ; i  < n;++i){
+        int cnt = 1;
+        while(!people.empty()){
+            if(people.top() <= arr[i]){
+                ans += (long long)look.top();
+                if(people.top() == arr[i]){
+                    cnt+=look.top();
+                }
+                
+                people.pop();
+                look.pop();
+            } else {
                 break;
             }
         }
-        for(int j=i-1;j>=0;j--){
-            if(a[n-i]<a[j]){
-                ans++;
-                break;
-            }
-        }
-
+        if(!people.empty())
+            ans+=1;
+        people.push(arr[i]);
+        look.push(cnt);
     }
-//    for(int i=n-1;i>=1;i--){
-//        for(int j=i-1;j>=0;j--){
-//            if(a[i]<a[j]){
-//                ans++;
-//                break;
-//            }
-//        }
-//    }
     
-    printf("%d",ans);
+    printf("%lld",ans);
+ 
     return 0;
 }
